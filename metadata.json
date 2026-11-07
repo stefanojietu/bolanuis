@@ -1,0 +1,6 @@
+{
+  "name": "Bolanius Prime Limited - Enterprise & Multi-Domain Web Ecosystem",
+  "description": "Corporate parent hub and multi-domain web ecosystem for Bolanius Prime Limited, Bolanius Media Studio, Bolanius Brands, and Bolanius Real Estate.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
