@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { SubdomainId } from '../../types';
-import { ArrowRight, CheckCircle2, Mail, Phone, MapPin } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Mail, Phone, MapPin, MessageCircle } from 'lucide-react';
+import { OFFICE_CONTACT } from '../../data/ecosystemData';
 
 interface ParentHubProps {
   onNavigate: (target: SubdomainId) => void;
@@ -87,14 +88,11 @@ export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
       <section id="divisions" className="py-20 px-6 border-b border-neutral-800">
         <div className="max-w-6xl mx-auto space-y-12">
           <div className="text-center space-y-2 max-w-xl mx-auto">
-            <h2 className="text-xs uppercase tracking-widest text-neutral-400 font-semibold">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white">
               Our Businesses
             </h2>
-            <h3 className="text-2xl sm:text-3xl font-bold text-white">
-              Specialized Sub-Brand Divisions
-            </h3>
             <p className="text-sm text-neutral-400">
-              Select a division below to enter its dedicated web portal.
+              Select a business below to learn more and visit its website.
             </p>
           </div>
 
@@ -136,8 +134,8 @@ export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
             <div className="bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden flex flex-col justify-between hover:border-neutral-700 transition-all">
               <div className="h-48 overflow-hidden bg-neutral-950">
                 <img
-                  src="https://images.pexels.com/photos/2422290/pexels-photo-2422290.jpeg?auto=compress&cs=tinysrgb&w=1200"
-                  alt="Bolanius Brands Billboard & Advertising"
+                  src="https://images.squarespace-cdn.com/content/v1/629e3bad3644967181ca70d7/c6835389-ceb2-43e1-999e-a1f2d5743a85/branding-for-interior-designers-dan-rak-design-branding-studio-chicago6.jpg"
+                  alt="Bolanius Brands"
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                   referrerPolicy="no-referrer"
                 />
@@ -169,7 +167,7 @@ export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
             <div className="bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden flex flex-col justify-between hover:border-neutral-700 transition-all">
               <div className="h-48 overflow-hidden bg-neutral-950">
                 <img
-                  src="/src/assets/images/realestate_luxury_property_1794079392405.jpg"
+                  src="https://framerusercontent.com/images/qAiNcohC0fIeyIc6Rd5eLX21B70.png?scale-down-to=1024&width=4032&height=2268"
                   alt="Bolanius Real Estate"
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                   referrerPolicy="no-referrer"
@@ -245,7 +243,7 @@ export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
 
       {/* Contact Section */}
       <section id="contact" className="py-20 px-6 border-b border-neutral-800">
-        <div className="max-w-3xl mx-auto space-y-8">
+        <div className="max-w-4xl mx-auto space-y-10">
           <div className="text-center space-y-2">
             <h2 className="text-xs uppercase tracking-widest text-neutral-400 font-semibold">
               Get in Touch
@@ -254,11 +252,61 @@ export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
               Contact Bolanius
             </h3>
             <p className="text-sm text-neutral-400">
-              Have an inquiry or corporate proposal? Send a message directly to Bolanius headquarters.
+              Reach our Lagos office directly by phone, WhatsApp, email, or send an inquiry below.
             </p>
           </div>
 
-          <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-6 sm:p-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="p-5 rounded-xl bg-neutral-900 border border-neutral-800 space-y-2">
+              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-neutral-400">
+                <Phone className="w-4 h-4 text-neutral-300" />
+                <span>Call / WhatsApp</span>
+              </div>
+              <div className="space-y-1.5 text-sm text-white font-medium">
+                {OFFICE_CONTACT.phones.map((phone) => (
+                  <div key={phone.display} className="flex items-center justify-between gap-2">
+                    <a href={`tel:${phone.tel}`} className="hover:underline">
+                      {phone.display}
+                    </a>
+                    <a
+                      href={`https://wa.me/${phone.wa}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-xs text-emerald-400 hover:text-emerald-300"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5" />
+                      <span>WhatsApp</span>
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="p-5 rounded-xl bg-neutral-900 border border-neutral-800 space-y-2">
+              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-neutral-400">
+                <MapPin className="w-4 h-4 text-neutral-300" />
+                <span>Office Address</span>
+              </div>
+              <p className="text-sm text-neutral-200 leading-relaxed">
+                {OFFICE_CONTACT.address}
+              </p>
+            </div>
+
+            <div className="p-5 rounded-xl bg-neutral-900 border border-neutral-800 space-y-2">
+              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-neutral-400">
+                <Mail className="w-4 h-4 text-neutral-300" />
+                <span>Email Address</span>
+              </div>
+              <a
+                href={`mailto:${OFFICE_CONTACT.email}`}
+                className="text-sm text-white font-medium hover:underline break-all inline-block"
+              >
+                {OFFICE_CONTACT.email}
+              </a>
+            </div>
+          </div>
+
+          <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-6 sm:p-8 max-w-3xl mx-auto">
             {submitted ? (
               <div className="text-center py-8 space-y-3">
                 <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto" />
@@ -343,9 +391,15 @@ export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
       </section>
 
       {/* Clean Footer */}
-      <footer className="py-8 px-6 text-center text-xs text-neutral-500">
+      <footer className="py-8 px-6 text-center text-xs text-neutral-500 space-y-1.5">
         <p>&copy; {new Date().getFullYear()} BOLANIUS PRIME LIMITED. All rights reserved.</p>
-        <p className="mt-1">One Vision. Multiple Solutions. Endless Possibilities.</p>
+        <p>{OFFICE_CONTACT.address}</p>
+        <p>
+          Call / WhatsApp: {OFFICE_CONTACT.phones.map((p) => p.display).join(', ')} ·{' '}
+          <a href={`mailto:${OFFICE_CONTACT.email}`} className="hover:text-neutral-300 underline">
+            {OFFICE_CONTACT.email}
+          </a>
+        </p>
       </footer>
     </div>
   );

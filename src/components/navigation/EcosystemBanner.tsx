@@ -13,11 +13,11 @@ export const EcosystemBanner: React.FC<EcosystemBannerProps> = ({
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const navItems: { id: SubdomainId; label: string; domain: string }[] = [
-    { id: 'parent', label: 'Home', domain: 'www.bolaniusprime.com' },
-    { id: 'media', label: 'Media Studio', domain: 'media.bolaniusprime.com' },
-    { id: 'brands', label: 'Bolanius Brands', domain: 'brands.bolaniusprime.com' },
-    { id: 'realestate', label: 'Real Estate', domain: 'realestate.bolaniusprime.com' },
+  const navItems: { id: SubdomainId; label: string }[] = [
+    { id: 'parent', label: 'Home' },
+    { id: 'media', label: 'Media Studio' },
+    { id: 'brands', label: 'Bolanius Brands' },
+    { id: 'realestate', label: 'Real Estate' },
   ];
 
   const handleMobileNav = (id: SubdomainId) => {
@@ -101,9 +101,6 @@ export const EcosystemBanner: React.FC<EcosystemBannerProps> = ({
                 }`}
               >
                 <span>{item.label}</span>
-                <span className={`text-[10px] font-mono ${isActive ? 'text-neutral-600' : 'text-neutral-500'}`}>
-                  {item.domain}
-                </span>
               </button>
             );
           })}

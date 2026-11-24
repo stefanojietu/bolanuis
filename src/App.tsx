@@ -38,11 +38,13 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col font-sans">
-      {/* Global Ecosystem Top Navigation Standard across ALL subdomains */}
-      <EcosystemBanner
-        currentSubdomain={currentSubdomain}
-        onNavigate={handleNavigate}
-      />
+      {/* Global Ecosystem Top Navigation shown only on the main page */}
+      {currentSubdomain === 'parent' && (
+        <EcosystemBanner
+          currentSubdomain={currentSubdomain}
+          onNavigate={handleNavigate}
+        />
+      )}
 
       {/* Main Subdomain Content Rendering */}
       <main className="flex-1">

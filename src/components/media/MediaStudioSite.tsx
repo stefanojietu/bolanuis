@@ -2,19 +2,18 @@ import React, { useState } from 'react';
 import { SubdomainId } from '../../types';
 import { 
   Camera, 
-  Video, 
-  Wand2, 
-  Film, 
-  Share2, 
-  CalendarDays, 
+  Heart, 
+  Sparkles, 
   X, 
   MapPin, 
-  Phone, 
-  Mail, 
   CheckCircle2, 
   ArrowRight,
-  ChevronRight
+  ArrowLeft,
+  Phone,
+  Mail,
 } from 'lucide-react';
+import { MEDIA_FOCUSED_SERVICES, OFFICE_CONTACT } from '../../data/ecosystemData';
+import mediaFramingImg from '../../assets/images/media_framing_lagos.jpg';
 
 interface MediaStudioSiteProps {
   onNavigate: (target: SubdomainId) => void;
@@ -23,7 +22,7 @@ interface MediaStudioSiteProps {
 interface PortfolioPhoto {
   id: string;
   title: string;
-  category: 'portraits' | 'weddings' | 'family' | 'events' | 'videos';
+  category: 'portraits' | 'weddings' | 'family';
   categoryLabel: string;
   imageUrl: string;
   location?: string;
@@ -41,12 +40,12 @@ export const MediaStudioSite: React.FC<MediaStudioSiteProps> = ({ onNavigate }) 
     email: '',
     phone: '',
     service: 'Portrait Session',
-    studioLocation: 'Island Studio (Lekki Phase 1)',
+    studioLocation: 'Main Studio (Egan, Igando, Lagos)',
     date: '',
     notes: '',
   });
 
-  // Direct image links from ijeworks.com
+  // Curated photography showcase from ijeworks
   const photos: PortfolioPhoto[] = [
     {
       id: 'p1',
@@ -62,13 +61,13 @@ export const MediaStudioSite: React.FC<MediaStudioSiteProps> = ({ onNavigate }) 
       category: 'weddings',
       categoryLabel: 'Weddings',
       imageUrl: 'https://ijeworks.com/wp-content/uploads/2023/05/Wedding-3.jpg',
-      location: 'Lagos Wedding',
+      location: 'Wedding Ceremony',
     },
     {
       id: 'p3',
       title: 'Generational Family Portrait',
       category: 'family',
-      categoryLabel: 'Family',
+      categoryLabel: 'Family Session',
       imageUrl: 'https://ijeworks.com/wp-content/uploads/2023/05/Family-Home.jpg',
       location: 'Family Studio',
     },
@@ -86,7 +85,7 @@ export const MediaStudioSite: React.FC<MediaStudioSiteProps> = ({ onNavigate }) 
       category: 'weddings',
       categoryLabel: 'Weddings',
       imageUrl: 'https://ijeworks.com/wp-content/uploads/2023/05/Wedding-1.jpg',
-      location: 'Celebration',
+      location: 'Traditional Rites',
     },
     {
       id: 'p6',
@@ -100,7 +99,7 @@ export const MediaStudioSite: React.FC<MediaStudioSiteProps> = ({ onNavigate }) 
       id: 'p7',
       title: 'Family Bond & Joyful Moments',
       category: 'family',
-      categoryLabel: 'Family',
+      categoryLabel: 'Family Session',
       imageUrl: 'https://ijeworks.com/wp-content/uploads/2023/05/Family-3.jpg',
       location: 'Outdoor Session',
     },
@@ -130,65 +129,22 @@ export const MediaStudioSite: React.FC<MediaStudioSiteProps> = ({ onNavigate }) 
     },
     {
       id: 'p11',
-      title: 'Corporate Brand & Event Session',
-      category: 'events',
-      categoryLabel: 'Brands & Events',
-      imageUrl: 'https://ijeworks.com/wp-content/uploads/2023/05/Portrait-23.jpg',
-      location: 'Event Coverage',
-    },
-    {
-      id: 'p12',
       title: 'Maternity & New Beginnings',
       category: 'family',
-      categoryLabel: 'Family',
+      categoryLabel: 'Family Session',
       imageUrl: 'https://ijeworks.com/wp-content/uploads/2023/05/Family-4.jpg',
       location: 'Studio Maternity',
     },
     {
-      id: 'p13',
-      title: 'Sculptural Lighting Monochrome',
+      id: 'p12',
+      title: 'Sculptural Monochrome Portrait',
       category: 'portraits',
       categoryLabel: 'Portrait Session',
       imageUrl: 'https://ijeworks.com/wp-content/uploads/2023/05/Portrait-6.jpg',
       location: 'Monochrome',
     },
-    {
-      id: 'p14',
-      title: 'Cinematography & Broadcast Film',
-      category: 'videos',
-      categoryLabel: 'Videos & Cinematography',
-      imageUrl: 'https://ijeworks.com/wp-content/uploads/2023/05/Portrait-21.jpg',
-      location: 'Production Stage',
-    },
-    {
-      id: 'p15',
-      title: 'Editorial Creative Direction',
-      category: 'portraits',
-      categoryLabel: 'Portrait Session',
-      imageUrl: 'https://ijeworks.com/wp-content/uploads/2023/05/Portrait-22.jpg',
-      location: 'Creative Direction',
-    },
-    {
-      id: 'p16',
-      title: 'Contemporary Studio Glamour',
-      category: 'portraits',
-      categoryLabel: 'Portrait Session',
-      imageUrl: 'https://ijeworks.com/wp-content/uploads/2023/05/Portrait-15.jpg',
-      location: 'Studio Glamour',
-    },
   ];
 
-  // Client brand logos directly from ijeworks.com
-  const clientLogos = [
-    { name: 'Pepsi', logo: 'https://ijeworks.com/wp-content/uploads/2023/05/PEPSI-400x284.jpg' },
-    { name: 'Google', logo: 'https://ijeworks.com/wp-content/uploads/2023/05/GOOGLE-400x284.jpg' },
-    { name: 'Netflix', logo: 'https://ijeworks.com/wp-content/uploads/2023/05/NETFLIX-400x284.jpg' },
-    { name: 'Paystack', logo: 'https://ijeworks.com/wp-content/uploads/2023/05/paystack-400x284.jpg' },
-    { name: 'Techpoint', logo: 'https://ijeworks.com/wp-content/uploads/2023/05/TECHPOINT-400x284.jpg' },
-    { name: 'Lagos Business School', logo: 'https://ijeworks.com/wp-content/uploads/2023/05/LBS-400x284.jpg' },
-  ];
-
-  // Testimonials with real photos from ijeworks.com
   const testimonials = [
     {
       name: 'Emmanuel Iren',
@@ -221,22 +177,27 @@ export const MediaStudioSite: React.FC<MediaStudioSiteProps> = ({ onNavigate }) 
 
   return (
     <div className="min-h-screen bg-white text-neutral-900 font-sans selection:bg-neutral-200">
-      {/* Studio Sub-Header (Ijeworks Style) */}
-      <header className="border-b border-neutral-100 bg-white sticky top-[57px] z-30">
+      {/* Studio Sub-Header */}
+      <header className="border-b border-neutral-100 bg-white sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-6">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => onNavigate('parent')}
+              title="Back to Bolanius Prime"
+              aria-label="Back to Bolanius Prime"
+              className="p-1.5 rounded-md text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100 transition-colors cursor-pointer"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </button>
             <span className="text-xl font-bold tracking-tight text-neutral-900">
               BOLANIUS MEDIA STUDIO
-            </span>
-            <span className="hidden sm:inline text-xs text-neutral-400 font-mono">
-              / media.bolaniusprime.com
             </span>
           </div>
 
           <nav className="hidden md:flex items-center gap-6 text-xs uppercase tracking-wider font-semibold text-neutral-600">
-            <a href="#pictures" className="hover:text-neutral-950 transition-colors">Pictures</a>
-            <a href="#services" className="hover:text-neutral-950 transition-colors">Services</a>
-            <a href="#clients" className="hover:text-neutral-950 transition-colors">Clients</a>
+            <a href="#services" className="hover:text-neutral-950 transition-colors">Our 3 Services</a>
+            <a href="#pictures" className="hover:text-neutral-950 transition-colors">Gallery</a>
             <a href="#testimonials" className="hover:text-neutral-950 transition-colors">Testimonials</a>
             <a href="#studios" className="hover:text-neutral-950 transition-colors">Studios</a>
           </nav>
@@ -251,8 +212,8 @@ export const MediaStudioSite: React.FC<MediaStudioSiteProps> = ({ onNavigate }) 
         </div>
       </header>
 
-      {/* 1. Hero Banner (Ijeworks Style High-Impact Visual Banner) */}
-      <section className="relative h-[550px] sm:h-[620px] bg-neutral-950 overflow-hidden">
+      {/* 1. Hero Banner */}
+      <section className="relative h-[520px] sm:h-[580px] bg-neutral-950 overflow-hidden">
         <img
           src="https://ijeworks.com/wp-content/uploads/2023/05/Home-Banner-1.jpg"
           alt="Bolanius Media Studio Gallery"
@@ -263,14 +224,14 @@ export const MediaStudioSite: React.FC<MediaStudioSiteProps> = ({ onNavigate }) 
 
         <div className="absolute inset-0 flex items-center justify-center text-center px-6">
           <div className="max-w-3xl space-y-6">
-            <p className="text-xs uppercase tracking-widest text-neutral-300 font-semibold">
-              Visual Storytelling & Portrait Studio
-            </p>
+            <div className="inline-block px-3 py-1 rounded bg-black/60 border border-white/20 text-neutral-300 text-xs font-mono uppercase tracking-widest">
+              Flagship Business · Photography & Portrait Studio
+            </div>
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
               Capturing Moments. Creating Visual Impact.
             </h1>
             <p className="text-sm sm:text-base text-neutral-200 max-w-xl mx-auto font-light leading-relaxed">
-              We tell stories through intentional portraits, cinematic love stories, luxury weddings, and commercial imaging for leading brands.
+              We focus on what we do best: creating timeless portraits, documenting intimate weddings, and delivering magazine-grade retouching that endures.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
               <button
@@ -278,127 +239,190 @@ export const MediaStudioSite: React.FC<MediaStudioSiteProps> = ({ onNavigate }) 
                 onClick={() => setShowBookingModal(true)}
                 className="px-6 py-3 bg-white hover:bg-neutral-100 text-neutral-950 text-xs font-bold uppercase tracking-wider rounded transition-colors cursor-pointer"
               >
-                BOOK A SESSION / GET A QUOTE
+                Book A Session
               </button>
               <a
                 href="#pictures"
                 className="px-6 py-3 bg-black/60 hover:bg-black/80 border border-white/30 text-white text-xs font-bold uppercase tracking-wider rounded transition-colors"
               >
-                EXPLORE GALLERY
+                View Selected Work
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 2. Category Highlights (Portrait Sessions, Weddings, Family Cards - Ijeworks Layout) */}
-      <section className="py-16 px-6 bg-neutral-50 border-b border-neutral-200">
-        <div className="max-w-7xl mx-auto space-y-8">
-          <div className="text-center space-y-2">
-            <h2 className="text-xs uppercase tracking-widest text-neutral-500 font-semibold">
-              Core Categories
+      {/* 2. Focused 3 Services Section */}
+      <section id="services" className="py-20 px-6 border-b border-neutral-200 bg-neutral-50">
+        <div className="max-w-6xl mx-auto space-y-12">
+          <div className="text-center space-y-2 max-w-xl mx-auto">
+            <span className="text-xs uppercase tracking-widest text-neutral-500 font-semibold">
+              Focused Craftsmanship
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-bold text-neutral-900">
+              Our 3 Core Photography Services
             </h2>
-            <h3 className="text-2xl sm:text-3xl font-bold text-neutral-900">
-              What We Love To Document
-            </h3>
+            <p className="text-sm text-neutral-600">
+              We concentrate our energy on 3 signature services to deliver world-class imagery with zero compromise.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Card 1: Portrait Sessions */}
-            <div 
-              onClick={() => {
-                setActiveTab('portraits');
-                document.getElementById('pictures')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="group relative h-96 rounded-xl overflow-hidden cursor-pointer shadow-sm hover:shadow-lg transition-all"
-            >
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Service 1: Portraits */}
+            <div className="group relative overflow-hidden p-8 rounded-xl bg-neutral-950 border border-neutral-800 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between">
               <img
                 src="https://ijeworks.com/wp-content/uploads/2023/05/Portrait-11.jpg"
-                alt="Portrait Sessions"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                alt="Portrait & Studio Sessions"
+                className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                 referrerPolicy="no-referrer"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              <div className="absolute bottom-6 left-6 right-6 text-white space-y-1">
-                <span className="text-[11px] uppercase tracking-widest text-neutral-300 font-mono">01. Studio & Outdoor</span>
-                <h4 className="text-xl font-bold">PORTRAIT SESSIONS</h4>
-                <p className="text-xs text-neutral-300 line-clamp-2">
-                  Personal portraits, milestone birthdays, corporate branding headshots, and creative beauty sessions.
-                </p>
-                <div className="pt-2 text-xs font-semibold flex items-center gap-1 text-white">
-                  <span>View Portraits</span>
-                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/95 via-neutral-950/80 to-neutral-950/65" />
+
+              <div className="relative z-10 space-y-4">
+                <div className="w-12 h-12 rounded-lg bg-white/10 backdrop-blur-sm border border-white/15 flex items-center justify-center text-white">
+                  <Camera className="w-6 h-6" />
                 </div>
+                <div>
+                  <span className="text-xs font-mono text-neutral-300">01. Signature Studio</span>
+                  <h3 className="text-lg font-bold text-white mt-1">Portrait & Studio Sessions</h3>
+                </div>
+                <p className="text-xs text-neutral-200 leading-relaxed">
+                  Personal branding portraits, milestone birthdays, corporate executive headshots, and creative beauty sessions in our calibrated studio environments.
+                </p>
+                <ul className="space-y-2 pt-2 border-t border-white/15 text-xs text-neutral-200">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
+                    <span>Profoto studio strobe lighting</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
+                    <span>Outfit changes & styling advice</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
+                    <span>Private viewing proof gallery</span>
+                  </li>
+                </ul>
               </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setFormData({ ...formData, service: 'Portrait Session' });
+                  setShowBookingModal(true);
+                }}
+                className="relative z-10 w-full mt-6 py-2.5 rounded bg-white hover:bg-neutral-200 text-neutral-950 text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer"
+              >
+                Book Portrait Session
+              </button>
             </div>
 
-            {/* Card 2: Weddings */}
-            <div 
-              onClick={() => {
-                setActiveTab('weddings');
-                document.getElementById('pictures')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="group relative h-96 rounded-xl overflow-hidden cursor-pointer shadow-sm hover:shadow-lg transition-all"
-            >
+            {/* Service 2: Weddings */}
+            <div className="group relative overflow-hidden p-8 rounded-xl bg-neutral-950 border border-neutral-800 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between">
               <img
                 src="https://ijeworks.com/wp-content/uploads/2023/05/Wedding-3.jpg"
-                alt="Weddings"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                alt="Weddings & Celebrations"
+                className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                 referrerPolicy="no-referrer"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              <div className="absolute bottom-6 left-6 right-6 text-white space-y-1">
-                <span className="text-[11px] uppercase tracking-widest text-neutral-300 font-mono">02. Love Stories</span>
-                <h4 className="text-xl font-bold">WEDDINGS</h4>
-                <p className="text-xs text-neutral-300 line-clamp-2">
-                  Documenting traditional ceremonies, wedding vows, emotional tears, and unforgettable ballroom receptions.
-                </p>
-                <div className="pt-2 text-xs font-semibold flex items-center gap-1 text-white">
-                  <span>View Weddings</span>
-                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/95 via-neutral-950/80 to-neutral-950/65" />
+
+              <div className="relative z-10 space-y-4">
+                <div className="w-12 h-12 rounded-lg bg-white/10 backdrop-blur-sm border border-white/15 flex items-center justify-center text-white">
+                  <Heart className="w-6 h-6" />
                 </div>
+                <div>
+                  <span className="text-xs font-mono text-neutral-300">02. Love Stories</span>
+                  <h3 className="text-lg font-bold text-white mt-1">Weddings & Celebrations</h3>
+                </div>
+                <p className="text-xs text-neutral-200 leading-relaxed">
+                  Documenting traditional marriage rites, wedding vows, emotional tears, and unforgettable ballroom receptions with candid intimacy.
+                </p>
+                <ul className="space-y-2 pt-2 border-t border-white/15 text-xs text-neutral-200">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
+                    <span>Traditional & white wedding coverage</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
+                    <span>Couple portrait sessions on-site</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
+                    <span>High-resolution master digital archive</span>
+                  </li>
+                </ul>
               </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setFormData({ ...formData, service: 'Weddings' });
+                  setShowBookingModal(true);
+                }}
+                className="relative z-10 w-full mt-6 py-2.5 rounded bg-white hover:bg-neutral-200 text-neutral-950 text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer"
+              >
+                Inquire on Wedding Date
+              </button>
             </div>
 
-            {/* Card 3: Family */}
-            <div 
-              onClick={() => {
-                setActiveTab('family');
-                document.getElementById('pictures')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="group relative h-96 rounded-xl overflow-hidden cursor-pointer shadow-sm hover:shadow-lg transition-all"
-            >
+            {/* Service 3: Retouching & Framing */}
+            <div className="group relative overflow-hidden p-8 rounded-xl bg-neutral-950 border border-neutral-800 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between">
               <img
-                src="https://ijeworks.com/wp-content/uploads/2023/05/Family-Home.jpg"
-                alt="Family"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                src={mediaFramingImg}
+                alt="High-End Retouching & Framing"
+                className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
                 referrerPolicy="no-referrer"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              <div className="absolute bottom-6 left-6 right-6 text-white space-y-1">
-                <span className="text-[11px] uppercase tracking-widest text-neutral-300 font-mono">03. Generations</span>
-                <h4 className="text-xl font-bold">FAMILY SESSIONS</h4>
-                <p className="text-xs text-neutral-300 line-clamp-2">
-                  Celebrating milestones, maternity bumps, generational families, and timeless family joy.
-                </p>
-                <div className="pt-2 text-xs font-semibold flex items-center gap-1 text-white">
-                  <span>View Family Work</span>
-                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/95 via-neutral-950/80 to-neutral-950/65" />
+
+              <div className="relative z-10 space-y-4">
+                <div className="w-12 h-12 rounded-lg bg-white/10 backdrop-blur-sm border border-white/15 flex items-center justify-center text-white">
+                  <Sparkles className="w-6 h-6" />
                 </div>
+                <div>
+                  <span className="text-xs font-mono text-neutral-300">03. Post-Production & Craft</span>
+                  <h3 className="text-lg font-bold text-white mt-1">High-End Retouching & Framing</h3>
+                </div>
+                <p className="text-xs text-neutral-200 leading-relaxed">
+                  Magazine-grade skin retouching, color grading that preserves authentic skin tones, and museum-quality canvas and acrylic framing.
+                </p>
+                <ul className="space-y-2 pt-2 border-t border-white/15 text-xs text-neutral-200">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
+                    <span>Texture-preserving beauty retouching</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
+                    <span>Old photograph restoration</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
+                    <span>Premium archival canvas prints & framing</span>
+                  </li>
+                </ul>
               </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setFormData({ ...formData, service: 'High-End Retouching' });
+                  setShowBookingModal(true);
+                }}
+                className="relative z-10 w-full mt-6 py-2.5 rounded bg-white hover:bg-neutral-200 text-neutral-950 text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer"
+              >
+                Request Retouching
+              </button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 3. Filterable Pictures / Gallery Grid (Clean Ijeworks Grid) */}
+      {/* 3. Filterable Pictures / Gallery Grid */}
       <section id="pictures" className="py-20 px-6 border-b border-neutral-200">
         <div className="max-w-7xl mx-auto space-y-10">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
             <div className="space-y-1">
-              <h2 className="text-xs uppercase tracking-widest text-neutral-500 font-semibold">
-                Our Gallery
-              </h2>
+              <span className="text-xs uppercase tracking-widest text-neutral-500 font-semibold">
+                Portfolio Showcase
+              </span>
               <h3 className="text-2xl sm:text-3xl font-bold text-neutral-900">
                 Pictures & Selected Stories
               </h3>
@@ -410,9 +434,7 @@ export const MediaStudioSite: React.FC<MediaStudioSiteProps> = ({ onNavigate }) 
                 { id: 'all', label: 'All Pictures' },
                 { id: 'portraits', label: 'Portraits' },
                 { id: 'weddings', label: 'Weddings' },
-                { id: 'family', label: 'Family' },
-                { id: 'events', label: 'Brands & Events' },
-                { id: 'videos', label: 'Cinematography' },
+                { id: 'family', label: 'Family & Milestones' },
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -510,139 +532,15 @@ export const MediaStudioSite: React.FC<MediaStudioSiteProps> = ({ onNavigate }) 
         </div>
       )}
 
-      {/* 4. Our 6 Services Modules (Prompt Specified) */}
-      <section id="services" className="py-20 px-6 border-b border-neutral-200 bg-neutral-50">
-        <div className="max-w-7xl mx-auto space-y-12">
-          <div className="text-center space-y-2 max-w-xl mx-auto">
-            <h2 className="text-xs uppercase tracking-widest text-neutral-500 font-semibold">
-              Capabilities
-            </h2>
-            <h3 className="text-2xl sm:text-3xl font-bold text-neutral-900">
-              Our 6 Media Services
-            </h3>
-            <p className="text-sm text-neutral-600">
-              Comprehensive visual production, storytelling, and professional studio capabilities.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* 1 */}
-            <div className="p-6 rounded-xl bg-white border border-neutral-200 space-y-3 shadow-sm">
-              <div className="w-10 h-10 rounded-lg bg-neutral-100 flex items-center justify-center text-neutral-900">
-                <Camera className="w-5 h-5" />
-              </div>
-              <h4 className="text-base font-bold text-neutral-900">
-                1. Photography & Professional Imaging
-              </h4>
-              <p className="text-xs text-neutral-600 leading-relaxed">
-                Weddings, engagements, birthdays, studio portraits, corporate/commercial, school, outdoor, lifestyle, and documentary photography.
-              </p>
-            </div>
-
-            {/* 2 */}
-            <div className="p-6 rounded-xl bg-white border border-neutral-200 space-y-3 shadow-sm">
-              <div className="w-10 h-10 rounded-lg bg-neutral-100 flex items-center justify-center text-neutral-900">
-                <Video className="w-5 h-5" />
-              </div>
-              <h4 className="text-base font-bold text-neutral-900">
-                2. Videography & Cinematography
-              </h4>
-              <p className="text-xs text-neutral-600 leading-relaxed">
-                Weddings, corporate events, promotional/commercial videos, documentaries, music videos, interviews, and product videos.
-              </p>
-            </div>
-
-            {/* 3 */}
-            <div className="p-6 rounded-xl bg-white border border-neutral-200 space-y-3 shadow-sm">
-              <div className="w-10 h-10 rounded-lg bg-neutral-100 flex items-center justify-center text-neutral-900">
-                <Wand2 className="w-5 h-5" />
-              </div>
-              <h4 className="text-base font-bold text-neutral-900">
-                3. Photo Editing & Image Enhancement
-              </h4>
-              <p className="text-xs text-neutral-600 leading-relaxed">
-                Professional retouching, color correction, background removal/replacement, portrait enhancement, old photo restoration, and print-ready preparation.
-              </p>
-            </div>
-
-            {/* 4 */}
-            <div className="p-6 rounded-xl bg-white border border-neutral-200 space-y-3 shadow-sm">
-              <div className="w-10 h-10 rounded-lg bg-neutral-100 flex items-center justify-center text-neutral-900">
-                <Film className="w-5 h-5" />
-              </div>
-              <h4 className="text-base font-bold text-neutral-900">
-                4. Media Production
-              </h4>
-              <p className="text-xs text-neutral-600 leading-relaxed">
-                Audio-visual production, corporate documentaries, commercial productions, and creative storytelling.
-              </p>
-            </div>
-
-            {/* 5 */}
-            <div className="p-6 rounded-xl bg-white border border-neutral-200 space-y-3 shadow-sm">
-              <div className="w-10 h-10 rounded-lg bg-neutral-100 flex items-center justify-center text-neutral-900">
-                <Share2 className="w-5 h-5" />
-              </div>
-              <h4 className="text-base font-bold text-neutral-900">
-                5. Digital Content Creation
-              </h4>
-              <p className="text-xs text-neutral-600 leading-relaxed">
-                Social media video/graphics, short-form video production, and digital promotional campaigns.
-              </p>
-            </div>
-
-            {/* 6 */}
-            <div className="p-6 rounded-xl bg-white border border-neutral-200 space-y-3 shadow-sm">
-              <div className="w-10 h-10 rounded-lg bg-neutral-100 flex items-center justify-center text-neutral-900">
-                <CalendarDays className="w-5 h-5" />
-              </div>
-              <h4 className="text-base font-bold text-neutral-900">
-                6. Event Coverage
-              </h4>
-              <p className="text-xs text-neutral-600 leading-relaxed">
-                Full photo and video coverage for corporate, social, religious, educational, and public events.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. Our Awesome Clients Strip (Ijeworks Style) */}
-      <section id="clients" className="py-16 px-6 border-b border-neutral-200">
-        <div className="max-w-6xl mx-auto space-y-8">
-          <div className="text-center space-y-1">
-            <h2 className="text-xs uppercase tracking-widest text-neutral-500 font-semibold">
-              Trusted By
-            </h2>
-            <h3 className="text-xl font-bold text-neutral-900">
-              OUR AWESOME CLIENTS
-            </h3>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 items-center">
-            {clientLogos.map((client, idx) => (
-              <div key={idx} className="p-3 bg-neutral-50 rounded-lg border border-neutral-200 flex items-center justify-center h-20 grayscale hover:grayscale-0 transition-all">
-                <img
-                  src={client.logo}
-                  alt={client.name}
-                  className="max-h-12 w-auto object-contain"
-                  referrerPolicy="no-referrer"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 6. Testimonials Section (Ijeworks Style) */}
+      {/* 4. Testimonials Section */}
       <section id="testimonials" className="py-20 px-6 border-b border-neutral-200 bg-neutral-50">
         <div className="max-w-6xl mx-auto space-y-12">
           <div className="text-center space-y-1">
-            <h2 className="text-xs uppercase tracking-widest text-neutral-500 font-semibold">
-              Words From Our Clients
-            </h2>
+            <span className="text-xs uppercase tracking-widest text-neutral-500 font-semibold">
+              Client Feedback
+            </span>
             <h3 className="text-2xl sm:text-3xl font-bold text-neutral-900">
-              TESTIMONIALS
+              Words From Our Clients
             </h3>
           </div>
 
@@ -671,40 +569,59 @@ export const MediaStudioSite: React.FC<MediaStudioSiteProps> = ({ onNavigate }) 
         </div>
       </section>
 
-      {/* 7. Studio Locations & Direct Booking CTA (Ijeworks Style) */}
+      {/* 5. Studio Location & Contact */}
       <section id="studios" className="py-20 px-6 border-b border-neutral-200">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
             <div className="space-y-2">
-              <h2 className="text-xs uppercase tracking-widest text-neutral-500 font-semibold">
-                Visit Us
-              </h2>
+              <span className="text-xs uppercase tracking-widest text-neutral-500 font-semibold">
+                Studio &amp; Office
+              </span>
               <h3 className="text-2xl sm:text-3xl font-bold text-neutral-900">
-                Our Studio Locations
+                Visit Our Lagos Studio
               </h3>
               <p className="text-sm text-neutral-600 leading-relaxed">
-                Step into our fully air-conditioned, acoustically treated studio spaces equipped with calibrated Profoto lighting and changing suites.
+                Step into our air-conditioned studio space equipped with calibrated Profoto lighting, or contact our booking desk directly.
               </p>
             </div>
 
             <div className="space-y-4">
               <div className="p-4 rounded-lg bg-neutral-50 border border-neutral-200 space-y-1">
                 <div className="flex items-center gap-2 text-sm font-bold text-neutral-900">
-                  <MapPin className="w-4 h-4 text-neutral-700" />
-                  <span>Island Studio (Lekki Phase 1)</span>
+                  <MapPin className="w-4 h-4 text-neutral-700 shrink-0" />
+                  <span>Office &amp; Studio Address</span>
                 </div>
                 <p className="text-xs text-neutral-600 pl-6">
-                  Admiralty Way, Lekki Phase 1, Lagos, Nigeria
+                  {OFFICE_CONTACT.address}
                 </p>
               </div>
 
               <div className="p-4 rounded-lg bg-neutral-50 border border-neutral-200 space-y-1">
                 <div className="flex items-center gap-2 text-sm font-bold text-neutral-900">
-                  <MapPin className="w-4 h-4 text-neutral-700" />
-                  <span>Mainland Studio (Ogudu)</span>
+                  <Phone className="w-4 h-4 text-neutral-700 shrink-0" />
+                  <span>Call / WhatsApp</span>
                 </div>
                 <p className="text-xs text-neutral-600 pl-6">
-                  Ogudu GRA, Lagos Mainland, Lagos, Nigeria
+                  {OFFICE_CONTACT.phones.map((p, idx) => (
+                    <React.Fragment key={p.display}>
+                      {idx > 0 && ', '}
+                      <a href={`tel:${p.tel}`} className="hover:underline text-neutral-800 font-medium">
+                        {p.display}
+                      </a>
+                    </React.Fragment>
+                  ))}
+                </p>
+              </div>
+
+              <div className="p-4 rounded-lg bg-neutral-50 border border-neutral-200 space-y-1">
+                <div className="flex items-center gap-2 text-sm font-bold text-neutral-900">
+                  <Mail className="w-4 h-4 text-neutral-700 shrink-0" />
+                  <span>Email</span>
+                </div>
+                <p className="text-xs text-neutral-600 pl-6">
+                  <a href={`mailto:${OFFICE_CONTACT.email}`} className="hover:underline text-neutral-800 font-medium">
+                    {OFFICE_CONTACT.email}
+                  </a>
                 </p>
               </div>
             </div>
@@ -715,7 +632,7 @@ export const MediaStudioSite: React.FC<MediaStudioSiteProps> = ({ onNavigate }) 
                 onClick={() => setShowBookingModal(true)}
                 className="px-6 py-3 bg-neutral-950 hover:bg-neutral-800 text-white text-xs font-bold uppercase tracking-wider rounded transition-colors cursor-pointer"
               >
-                BOOK YOUR STUDIO SESSION
+                Book Your Studio Session
               </button>
             </div>
           </div>
@@ -749,9 +666,9 @@ export const MediaStudioSite: React.FC<MediaStudioSiteProps> = ({ onNavigate }) 
             {bookingSuccess ? (
               <div className="text-center py-8 space-y-3">
                 <CheckCircle2 className="w-12 h-12 text-emerald-600 mx-auto" />
-                <h4 className="text-lg font-bold text-neutral-900">Session Request Dispatched</h4>
+                <h4 className="text-lg font-bold text-neutral-900">Session Request Received</h4>
                 <p className="text-xs text-neutral-600 max-w-sm mx-auto">
-                  Thank you, {formData.name}. Our studio booking manager has received your shoot details for {formData.studioLocation} and will respond within 2 hours.
+                  Thank you, {formData.name}. Our studio booking manager has received your shoot details for {formData.studioLocation} and will confirm your session shortly.
                 </p>
                 <button
                   type="button"
@@ -767,9 +684,9 @@ export const MediaStudioSite: React.FC<MediaStudioSiteProps> = ({ onNavigate }) 
             ) : (
               <form onSubmit={handleBookingSubmit} className="space-y-4">
                 <div className="space-y-1">
-                  <h3 className="text-lg font-bold text-neutral-900">BOOK A SESSION / GET A QUOTE</h3>
+                  <h3 className="text-lg font-bold text-neutral-900">BOOK A STUDIO SESSION</h3>
                   <p className="text-xs text-neutral-500">
-                    Schedule a photo or video shoot with Bolanius Media Studio.
+                    Schedule a portrait session or inquire about wedding photography.
                   </p>
                 </div>
 
@@ -819,23 +736,20 @@ export const MediaStudioSite: React.FC<MediaStudioSiteProps> = ({ onNavigate }) 
                       className="w-full px-3 py-2 rounded border border-neutral-300 text-xs text-neutral-900 focus:outline-none focus:border-neutral-950"
                     >
                       <option value="Portrait Session">Portrait Session (Personal / Birthday)</option>
-                      <option value="Weddings">Wedding & Engagement</option>
-                      <option value="Family Session">Family & Maternity</option>
-                      <option value="Corporate Headshots">Corporate & Headshots</option>
-                      <option value="Videography & Cinema">Videography & Cinematography</option>
-                      <option value="Event Coverage">Event Coverage</option>
+                      <option value="Weddings">Wedding & Celebration</option>
+                      <option value="Corporate Headshots">Corporate & Executive Headshot</option>
+                      <option value="High-End Retouching">High-End Retouching & Framing</option>
                     </select>
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs font-semibold text-neutral-700">Studio Location</label>
+                    <label className="text-xs font-semibold text-neutral-700">Location</label>
                     <select
                       value={formData.studioLocation}
                       onChange={(e) => setFormData({ ...formData, studioLocation: e.target.value })}
                       className="w-full px-3 py-2 rounded border border-neutral-300 text-xs text-neutral-900 focus:outline-none focus:border-neutral-950"
                     >
-                      <option value="Island Studio (Lekki Phase 1)">Island Studio (Lekki Phase 1)</option>
-                      <option value="Mainland Studio (Ogudu)">Mainland Studio (Ogudu)</option>
+                      <option value="Main Studio (Egan, Igando, Lagos)">Main Studio (Egan, Igando, Lagos)</option>
                       <option value="On-Location Shoot">On-Location Shoot</option>
                     </select>
                   </div>
@@ -852,12 +766,12 @@ export const MediaStudioSite: React.FC<MediaStudioSiteProps> = ({ onNavigate }) 
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-xs font-semibold text-neutral-700">Shoot Notes</label>
+                  <label className="text-xs font-semibold text-neutral-700">Shoot Details / Notes</label>
                   <textarea
                     rows={3}
                     value={formData.notes}
                     onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                    placeholder="Tell us about the occasion, outfit changes, or desired theme..."
+                    placeholder="Tell us about the occasion, outfit changes, or desired style..."
                     className="w-full px-3 py-2 rounded border border-neutral-300 text-xs text-neutral-900 focus:outline-none resize-none"
                   />
                 </div>
@@ -874,7 +788,7 @@ export const MediaStudioSite: React.FC<MediaStudioSiteProps> = ({ onNavigate }) 
         </div>
       )}
 
-      {/* Footer (Ijeworks Style) */}
+      {/* Footer */}
       <footer className="py-12 px-6 bg-neutral-950 text-neutral-400 text-xs">
         <div className="max-w-7xl mx-auto space-y-8">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pb-6 border-b border-neutral-800">
@@ -910,7 +824,9 @@ export const MediaStudioSite: React.FC<MediaStudioSiteProps> = ({ onNavigate }) 
 
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-neutral-500">
             <p>&copy; {new Date().getFullYear()} Bolanius Media Studio · media.bolaniusprime.com</p>
-            <p>Lagos Studio · Island & Mainland</p>
+            <p>
+              {OFFICE_CONTACT.address} · Call/WhatsApp: {OFFICE_CONTACT.phones.map((p) => p.display).join(', ')} · {OFFICE_CONTACT.email}
+            </p>
           </div>
         </div>
       </footer>
