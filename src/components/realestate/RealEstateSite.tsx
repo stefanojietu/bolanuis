@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { SubdomainId } from '../../types';
-import { MapPin, CheckCircle2, ArrowRight, ArrowLeft, X, Building2, Key, Search, Phone, Mail, MessageCircle } from 'lucide-react';
+import { MapPin, CheckCircle2, ArrowRight, ArrowLeft, X, Building2, Key, Search, Phone, Mail, MessageCircle, ExternalLink } from 'lucide-react';
 import { OFFICE_CONTACT } from '../../data/ecosystemData';
+import { OfficeLocationMap } from '../shared/OfficeLocationMap';
 
 interface RealEstateSiteProps {
   onNavigate: (target: SubdomainId) => void;
@@ -237,9 +238,29 @@ export const RealEstateSite: React.FC<RealEstateSiteProps> = ({ onNavigate }) =>
             </div>
 
             <div className="p-6 rounded-xl bg-neutral-900 border border-neutral-800 space-y-3">
-              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-neutral-400">
-                <MapPin className="w-4 h-4 text-neutral-300" />
-                <span>Visit Our Office</span>
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-neutral-400">
+                  <a
+                    href={OFFICE_CONTACT.mapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Open office location on your device"
+                    title="Open location on your device"
+                    className="inline-flex items-center justify-center w-7 h-7 rounded-md bg-neutral-800 text-white hover:bg-white hover:text-neutral-950 transition-colors"
+                  >
+                    <MapPin className="w-4 h-4" />
+                  </a>
+                  <span>Visit Our Office</span>
+                </div>
+                <a
+                  href={OFFICE_CONTACT.mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-xs text-neutral-300 hover:text-white underline"
+                >
+                  <span>Maps</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
               </div>
               <p className="text-sm text-neutral-200 leading-relaxed">
                 {OFFICE_CONTACT.address}
@@ -259,6 +280,8 @@ export const RealEstateSite: React.FC<RealEstateSiteProps> = ({ onNavigate }) =>
               </a>
             </div>
           </div>
+
+          <OfficeLocationMap variant="dark" />
 
           <div className="text-center pt-2">
             <button

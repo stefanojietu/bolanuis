@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { SubdomainId } from '../../types';
-import { ArrowRight, CheckCircle2, Mail, Phone, MapPin, MessageCircle } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Mail, Phone, MapPin, MessageCircle, ExternalLink } from 'lucide-react';
 import { OFFICE_CONTACT } from '../../data/ecosystemData';
+import { OfficeLocationMap } from '../shared/OfficeLocationMap';
 
 interface ParentHubProps {
   onNavigate: (target: SubdomainId) => void;
@@ -215,7 +216,7 @@ export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
             <div className="p-8 rounded-xl bg-neutral-900 border border-neutral-800 space-y-3">
               <h4 className="text-lg font-bold text-white">Our Mission</h4>
               <p className="text-sm text-neutral-300 leading-relaxed">
-                To deliver innovative, dependable, and high-quality products and services that create value, solve problems, and exceed customer expectations across different industries.
+                To deliver innovative, dependable, and high-quality products and services that create value, solve problems across different industries.
               </p>
             </div>
 
@@ -282,14 +283,36 @@ export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
               </div>
             </div>
 
-            <div className="p-5 rounded-xl bg-neutral-900 border border-neutral-800 space-y-2">
-              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-neutral-400">
-                <MapPin className="w-4 h-4 text-neutral-300" />
-                <span>Office Address</span>
+            <div className="p-5 rounded-xl bg-neutral-900 border border-neutral-800 space-y-2 flex flex-col justify-between">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-neutral-400">
+                    <a
+                      href={OFFICE_CONTACT.mapsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Open office location on your device"
+                      title="Open location on your device"
+                      className="inline-flex items-center justify-center w-7 h-7 rounded-md bg-neutral-800 text-white hover:bg-white hover:text-neutral-950 transition-colors"
+                    >
+                      <MapPin className="w-4 h-4" />
+                    </a>
+                    <span>Office Address</span>
+                  </div>
+                  <a
+                    href={OFFICE_CONTACT.mapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs text-neutral-300 hover:text-white underline"
+                  >
+                    <span>Maps</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+                <p className="text-sm text-neutral-200 leading-relaxed">
+                  {OFFICE_CONTACT.address}
+                </p>
               </div>
-              <p className="text-sm text-neutral-200 leading-relaxed">
-                {OFFICE_CONTACT.address}
-              </p>
             </div>
 
             <div className="p-5 rounded-xl bg-neutral-900 border border-neutral-800 space-y-2">
@@ -305,6 +328,8 @@ export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
               </a>
             </div>
           </div>
+
+          <OfficeLocationMap variant="dark" />
 
           <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-6 sm:p-8 max-w-3xl mx-auto">
             {submitted ? (

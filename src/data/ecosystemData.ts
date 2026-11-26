@@ -12,6 +12,8 @@ export const OFFICE_CONTACT = {
   ],
   address: '1, Tunde Ilufoye Street, Off Benson Adu-Fatoki, Egan, Igando, Lagos.',
   email: 'bolaniusprimelimited@gmail.com',
+  mapsUrl:
+    'https://www.google.com/maps/search/?api=1&query=1+Tunde+Ilufoye+Street%2C+Off+Benson+Adu-Fatoki%2C+Egan%2C+Igando%2C+Lagos%2C+Nigeria',
 };
 
 export const SUBDOMAINS: Record<string, SubdomainMeta> = {

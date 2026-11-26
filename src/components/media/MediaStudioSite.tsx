@@ -11,8 +11,10 @@ import {
   ArrowLeft,
   Phone,
   Mail,
+  ExternalLink,
 } from 'lucide-react';
 import { MEDIA_FOCUSED_SERVICES, OFFICE_CONTACT } from '../../data/ecosystemData';
+import { OfficeLocationMap } from '../shared/OfficeLocationMap';
 import mediaFramingImg from '../../assets/images/media_framing_lagos.jpg';
 
 interface MediaStudioSiteProps {
@@ -587,11 +589,31 @@ export const MediaStudioSite: React.FC<MediaStudioSiteProps> = ({ onNavigate }) 
 
             <div className="space-y-4">
               <div className="p-4 rounded-lg bg-neutral-50 border border-neutral-200 space-y-1">
-                <div className="flex items-center gap-2 text-sm font-bold text-neutral-900">
-                  <MapPin className="w-4 h-4 text-neutral-700 shrink-0" />
-                  <span>Office &amp; Studio Address</span>
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 text-sm font-bold text-neutral-900">
+                    <a
+                      href={OFFICE_CONTACT.mapsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Open studio location on your device"
+                      title="Open location on your device"
+                      className="inline-flex items-center justify-center w-7 h-7 rounded-md bg-neutral-900 text-white hover:bg-neutral-700 transition-colors shrink-0"
+                    >
+                      <MapPin className="w-4 h-4" />
+                    </a>
+                    <span>Office &amp; Studio Address</span>
+                  </div>
+                  <a
+                    href={OFFICE_CONTACT.mapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-neutral-700 hover:text-neutral-950 underline shrink-0"
+                  >
+                    <span>Open in Maps</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
                 </div>
-                <p className="text-xs text-neutral-600 pl-6">
+                <p className="text-xs text-neutral-600 pl-9">
                   {OFFICE_CONTACT.address}
                 </p>
               </div>
@@ -645,6 +667,10 @@ export const MediaStudioSite: React.FC<MediaStudioSiteProps> = ({ onNavigate }) 
               referrerPolicy="no-referrer"
             />
           </div>
+        </div>
+
+        <div className="max-w-6xl mx-auto mt-10">
+          <OfficeLocationMap variant="light" />
         </div>
       </section>
 
