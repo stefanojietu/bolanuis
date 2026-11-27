@@ -11,6 +11,7 @@ import {
 } from '@vis.gl/react-google-maps';
 import { MapPin, ExternalLink, Loader2 } from 'lucide-react';
 import { OFFICE_CONTACT } from '../../data/ecosystemData';
+import { useDeviceTheme } from '../../hooks/useDeviceTheme';
 
 interface OfficeLocationMapProps {
   variant?: 'dark' | 'light';
@@ -27,17 +28,49 @@ const SEARCH_QUERIES = [
   'Egan, Igando, Lagos, Nigeria',
 ];
 
+const EMBED_MAP_URL =
+  'https://maps.google.com/maps?q=1+Tunde+Ilufoye+Street,+Egan,+Igando,+Lagos,+Nigeria&t=&z=15&ie=UTF8&iwloc=&output=embed';
+
 const hasMapsApiKey = Boolean(import.meta.env.VITE_GOOGLE_MAPS_API_KEY);
+
+const EmbedMapPreview: React.FC<{ variant: 'dark' | 'light' }> = ({ variant }) => (
+  <div className="h-80 sm:h-96 w-full relative">
+    <iframe
+      title="BOLANIUS PRIME LIMITED Office Location Map"
+      src={EMBED_MAP_URL}
+      loading="lazy"
+      referrerPolicy="no-referrer-when-downgrade"
+      className={`w-full h-full border-0 ${variant === 'dark' ? 'bg-neutral-950' : 'bg-neutral-100'}`}
+      allowFullScreen
+    />
+  </div>
+);
 
 const InteractiveOfficeMap: React.FC<{ variant: 'dark' | 'light' }> = ({ variant }) => {
   const apiStatus = useApiLoadingStatus();
   const placesLib = useMapsLibrary('places');
   const [resolvedPlace, setResolvedPlace] = useState<ResolvedPlace | null>(null);
   const [lookupDone, setLookupDone] = useState(false);
+  const [authOrQuotaFailed, setAuthOrQuotaFailed] = useState(false);
   const [infoOpen, setInfoOpen] = useState(true);
   const [markerRef, marker] = useAdvancedMarkerRef();
 
   const isDark = variant === 'dark';
+
+  useEffect(() => {
+    const onQuotaOrAuthFailure = () => setAuthOrQuotaFailed(true);
+    window.addEventListener('gmp-quota-exceeded', onQuotaOrAuthFailure);
+    return () => window.removeEventListener('gmp-quota-exceeded', onQuotaOrAuthFailure);
+  }, []);
+
+  // Ensure loading state cannot hang indefinitely on restricted deployments
+  useEffect(() => {
+    if (resolvedPlace || lookupDone) return;
+    const timeoutId = window.setTimeout(() => {
+      setLookupDone(true);
+    }, 6000);
+    return () => window.clearTimeout(timeoutId);
+  }, [resolvedPlace, lookupDone]);
 
   useEffect(() => {
     if (!placesLib) return;
@@ -96,50 +129,12 @@ const InteractiveOfficeMap: React.FC<{ variant: 'dark' | 'light' }> = ({ variant
   }, [placesLib]);
 
   const isFailed =
-    apiStatus === APILoadingStatus.FAILED || apiStatus === APILoadingStatus.AUTH_FAILURE;
+    authOrQuotaFailed ||
+    apiStatus === APILoadingStatus.FAILED ||
+    apiStatus === APILoadingStatus.AUTH_FAILURE;
 
   if (isFailed || (lookupDone && !resolvedPlace)) {
-    return (
-      <div
-        className={`h-80 sm:h-96 w-full flex flex-col items-center justify-center p-6 text-center space-y-4 ${
-          isDark ? 'bg-neutral-950 text-neutral-300' : 'bg-neutral-100 text-neutral-700'
-        }`}
-      >
-        <a
-          href={OFFICE_CONTACT.mapsUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Open office location on your device"
-          className={`w-14 h-14 rounded-full flex items-center justify-center transition-transform hover:scale-105 ${
-            isDark
-              ? 'bg-neutral-800 text-white hover:bg-neutral-700'
-              : 'bg-neutral-900 text-white hover:bg-neutral-800'
-          }`}
-        >
-          <MapPin className="w-6 h-6" />
-        </a>
-        <div className="space-y-1 max-w-md">
-          <p className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-neutral-900'}`}>
-            BOLANIUS PRIME LIMITED
-          </p>
-          <p className="text-xs leading-relaxed">{OFFICE_CONTACT.address}</p>
-        </div>
-        <a
-          href={OFFICE_CONTACT.mapsUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`inline-flex items-center gap-2 px-4 py-2 rounded-md text-xs font-semibold transition-colors ${
-            isDark
-              ? 'bg-white text-neutral-950 hover:bg-neutral-200'
-              : 'bg-neutral-950 text-white hover:bg-neutral-800'
-          }`}
-        >
-          <MapPin className="w-3.5 h-3.5" />
-          <span>Open in Device Maps</span>
-          <ExternalLink className="w-3 h-3" />
-        </a>
-      </div>
-    );
+    return <EmbedMapPreview variant={variant} />;
   }
 
   if (!resolvedPlace) {
@@ -202,18 +197,21 @@ const InteractiveOfficeMap: React.FC<{ variant: 'dark' | 'light' }> = ({ variant
   );
 };
 
-export const OfficeLocationMap: React.FC<OfficeLocationMapProps> = ({ variant = 'dark' }) => {
-  const isDark = variant === 'dark';
+export const OfficeLocationMap: React.FC<OfficeLocationMapProps> = () => {
+  const deviceTheme = useDeviceTheme();
+  const isDark = deviceTheme === 'dark';
 
   return (
     <div
       className={`rounded-xl overflow-hidden border ${
-        isDark ? 'bg-neutral-900 border-neutral-800' : 'bg-white border-neutral-200 shadow-sm'
+        isDark
+          ? 'bg-neutral-900 border-neutral-800'
+          : 'bg-[#fcfbf7] border-stone-200/90 shadow-[0_2px_10px_rgba(28,25,23,0.05),0_1px_2px_rgba(28,25,23,0.04)]'
       }`}
     >
       <div
         className={`px-5 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b ${
-          isDark ? 'border-neutral-800' : 'border-neutral-200'
+          isDark ? 'border-neutral-800' : 'border-stone-200/90'
         }`}
       >
         <div className="flex items-start sm:items-center gap-3">
@@ -226,7 +224,7 @@ export const OfficeLocationMap: React.FC<OfficeLocationMapProps> = ({ variant = 
             className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
               isDark
                 ? 'bg-neutral-800 text-white hover:bg-white hover:text-neutral-950'
-                : 'bg-neutral-100 text-neutral-900 hover:bg-neutral-900 hover:text-white'
+                : 'bg-[#efece4] text-neutral-900 hover:bg-neutral-900 hover:text-white'
             }`}
           >
             <MapPin className="w-4 h-4" />
@@ -258,47 +256,9 @@ export const OfficeLocationMap: React.FC<OfficeLocationMapProps> = ({ variant = 
       </div>
 
       {hasMapsApiKey ? (
-        <InteractiveOfficeMap variant={variant} />
+        <InteractiveOfficeMap variant={deviceTheme} />
       ) : (
-        <div
-          className={`h-80 sm:h-96 w-full flex flex-col items-center justify-center p-6 text-center space-y-4 ${
-            isDark ? 'bg-neutral-950 text-neutral-300' : 'bg-neutral-100 text-neutral-700'
-          }`}
-        >
-          <a
-            href={OFFICE_CONTACT.mapsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Open office location on your device"
-            className={`w-14 h-14 rounded-full flex items-center justify-center transition-transform hover:scale-105 ${
-              isDark
-                ? 'bg-neutral-800 text-white hover:bg-neutral-700'
-                : 'bg-neutral-900 text-white hover:bg-neutral-800'
-            }`}
-          >
-            <MapPin className="w-6 h-6" />
-          </a>
-          <div className="space-y-1 max-w-md">
-            <p className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-neutral-900'}`}>
-              BOLANIUS PRIME LIMITED
-            </p>
-            <p className="text-xs leading-relaxed">{OFFICE_CONTACT.address}</p>
-          </div>
-          <a
-            href={OFFICE_CONTACT.mapsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-md text-xs font-semibold transition-colors ${
-              isDark
-                ? 'bg-white text-neutral-950 hover:bg-neutral-200'
-                : 'bg-neutral-950 text-white hover:bg-neutral-800'
-            }`}
-          >
-            <MapPin className="w-3.5 h-3.5" />
-            <span>Open in Device Maps</span>
-            <ExternalLink className="w-3 h-3" />
-          </a>
-        </div>
+        <EmbedMapPreview variant={deviceTheme} />
       )}
     </div>
   );

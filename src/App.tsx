@@ -7,10 +7,12 @@ import { ParentHub } from './components/parent/ParentHub';
 import { MediaStudioSite } from './components/media/MediaStudioSite';
 import { BrandsSite } from './components/brands/BrandsSite';
 import { RealEstateSite } from './components/realestate/RealEstateSite';
+import { useDeviceTheme } from './hooks/useDeviceTheme';
 
 const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '';
 
 export default function App() {
+  useDeviceTheme();
   const [currentSubdomain, setCurrentSubdomain] = useState<SubdomainId>('parent');
   const [gmpQuotaExceeded, setGmpQuotaExceeded] = useState(false);
 
@@ -48,7 +50,7 @@ export default function App() {
   };
 
   const content = (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#f6f4ef] paper-canvas dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 flex flex-col font-sans transition-colors">
       {gmpQuotaExceeded && (
         <div className="bg-amber-50 border-b border-amber-200 text-amber-900 px-4 py-2.5 text-xs md:text-sm text-center sticky top-0 z-50 shadow-sm">
           <span>

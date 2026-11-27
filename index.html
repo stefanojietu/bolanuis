@@ -12,8 +12,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+      (function () {
+        try {
+          var isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          document.documentElement.classList.toggle('dark', isDark);
+        } catch (e) {}
+      })();
+    </script>
   </head>
-  <body class="bg-neutral-950 text-neutral-100 antialiased selection:bg-amber-500/30 selection:text-amber-200">
+  <body class="bg-[#f6f4ef] paper-canvas dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 antialiased selection:bg-amber-500/30 selection:text-amber-900 dark:selection:text-amber-200">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

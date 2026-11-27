@@ -3,6 +3,7 @@ import { SubdomainId } from '../../types';
 import { ArrowRight, CheckCircle2, Mail, Phone, MapPin, MessageCircle, ExternalLink } from 'lucide-react';
 import { OFFICE_CONTACT } from '../../data/ecosystemData';
 import { OfficeLocationMap } from '../shared/OfficeLocationMap';
+import { sendEnquiryToEmail, buildMailtoHref } from '../../utils/sendEnquiry';
 
 interface ParentHubProps {
   onNavigate: (target: SubdomainId) => void;
@@ -10,6 +11,8 @@ interface ParentHubProps {
 
 export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -17,9 +20,29 @@ export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
     message: '',
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const enquirySubject = `[Bolanius Prime] Website Enquiry - ${formData.division}`;
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setSending(true);
+    setSubmitError(null);
+
+    const result = await sendEnquiryToEmail({
+      subject: enquirySubject,
+      name: formData.name,
+      email: formData.email,
+      fields: {
+        Division: formData.division,
+        Message: formData.message,
+      },
+    });
+
+    setSending(false);
+    if (result.ok) {
+      setSubmitted(true);
+    } else {
+      setSubmitError(result.error || 'Could not send enquiry.');
+    }
   };
 
   const coreValues = [
@@ -29,40 +52,40 @@ export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
     { title: 'Creativity', desc: 'Inspiring visual storytelling and distinctive design solutions.' },
     { title: 'Professionalism', desc: 'Upholding strict punctuality, disciplined execution, and clear communication.' },
     { title: 'Reliability', desc: 'Consistently fulfilling commitments and delivering dependable results.' },
-    { title: 'Customer Satisfaction', desc: 'Aligning closely with client goals to exceed expectations in every engagement.' },
+    { title: 'Customer Satisfaction', desc: 'Understanding client goals and delivering solutions aligned with their expectations.' },
   ];
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100 font-sans">
+    <div className="min-h-screen bg-[#f6f4ef] paper-canvas dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 font-sans transition-colors">
       {/* Hero Section */}
-      <section className="border-b border-neutral-800 py-20 px-6">
+      <section className="border-b border-stone-200/90 dark:border-neutral-800 py-20 px-6">
         <div className="max-w-5xl mx-auto text-center space-y-6">
-          <p className="text-xs uppercase tracking-widest text-neutral-400 font-medium">
+          <p className="text-xs uppercase tracking-widest text-neutral-500 dark:text-neutral-400 font-medium">
             www.bolaniusprime.com
           </p>
 
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-neutral-950 dark:text-white leading-tight">
             WELCOME TO BOLANIUS PRIME LIMITED
           </h1>
 
-          <p className="text-lg sm:text-xl text-neutral-300 max-w-2xl mx-auto font-normal">
+          <p className="text-lg sm:text-xl text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto font-normal">
             Your World of Creativity, Business, and Professional Solutions
           </p>
 
-          <div className="inline-block py-2 px-4 rounded-md bg-neutral-900 border border-neutral-800 text-sm text-neutral-300 italic">
+          <div className="inline-block py-2 px-4 rounded-md bg-[#fcfbf7] dark:bg-neutral-900 border border-stone-200/90 dark:border-neutral-800 shadow-[0_1px_2px_rgba(28,25,23,0.04)] dark:shadow-none text-sm text-neutral-700 dark:text-neutral-300 italic">
             &ldquo;One Vision. Multiple Solutions. Endless Possibilities.&rdquo;
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
             <a
               href="#divisions"
-              className="px-6 py-3 rounded-md bg-white text-neutral-950 font-semibold text-sm hover:bg-neutral-200 transition-colors"
+              className="px-6 py-3 rounded-md bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 font-semibold text-sm hover:bg-neutral-800 dark:hover:bg-neutral-200 shadow-sm transition-colors"
             >
-              EXPLORE OUR DIVISIONS
+              EXPLORE OUR SERVICES
             </a>
             <a
               href="#contact"
-              className="px-6 py-3 rounded-md bg-neutral-900 border border-neutral-700 text-white font-semibold text-sm hover:bg-neutral-800 transition-colors"
+              className="px-6 py-3 rounded-md bg-[#fcfbf7] dark:bg-neutral-900 border border-stone-300 dark:border-neutral-700 text-neutral-900 dark:text-white font-semibold text-sm hover:bg-[#efece4] dark:hover:bg-neutral-800 shadow-xs transition-colors"
             >
               CONTACT BOLANIUS
             </a>
@@ -71,36 +94,36 @@ export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
       </section>
 
       {/* Corporate Overview Section */}
-      <section className="py-16 px-6 border-b border-neutral-800 bg-neutral-900/40">
+      <section className="py-16 px-6 border-b border-stone-200/90 dark:border-neutral-800 bg-[#efece4]/70 dark:bg-neutral-900/40 transition-colors">
         <div className="max-w-4xl mx-auto space-y-6 text-center">
-          <h2 className="text-xs uppercase tracking-widest text-neutral-400 font-semibold">
+          <h2 className="text-xs uppercase tracking-widest text-neutral-500 dark:text-neutral-400 font-semibold">
             About The Company
           </h2>
-          <h3 className="text-2xl sm:text-3xl font-bold text-white">
+          <h3 className="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white">
             A Multi-Sector Enterprise Built for Specialized Excellence
           </h3>
-          <p className="text-base text-neutral-300 leading-relaxed text-left sm:text-center">
+          <p className="text-base text-neutral-600 dark:text-neutral-300 leading-relaxed text-left sm:text-center">
             BOLANIUS PRIME LIMITED is a multi-sector corporate enterprise operating across visual media, brand development, commercial trade, real estate acquisitions, and project execution. Bolanius guides three autonomous business divisions, ensuring every client receives tailored industry expertise backed by corporate dependability.
           </p>
         </div>
       </section>
 
       {/* Division Selector Cards (Leading to the other 3 sites) */}
-      <section id="divisions" className="py-20 px-6 border-b border-neutral-800">
+      <section id="divisions" className="py-20 px-6 border-b border-stone-200/90 dark:border-neutral-800">
         <div className="max-w-6xl mx-auto space-y-12">
           <div className="text-center space-y-2 max-w-xl mx-auto">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white">
-              Our Businesses
+            <h2 className="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white">
+              Explore Our Services
             </h2>
-            <p className="text-sm text-neutral-400">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400">
               Select a business below to learn more and visit its website.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Card 1: Bolanius Media Studio */}
-            <div className="bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden flex flex-col justify-between hover:border-neutral-700 transition-all">
-              <div className="h-48 overflow-hidden bg-neutral-950">
+            <div className="bg-[#fcfbf7] dark:bg-neutral-900 border border-stone-200/90 dark:border-neutral-800 rounded-xl overflow-hidden flex flex-col justify-between hover:border-stone-300 dark:hover:border-neutral-700 transition-all shadow-[0_2px_10px_rgba(28,25,23,0.05),0_1px_2px_rgba(28,25,23,0.04)] dark:shadow-sm">
+              <div className="h-48 overflow-hidden bg-stone-200/60 dark:bg-neutral-950">
                 <img
                   src="https://ijeworks.com/wp-content/uploads/2023/05/Home-Banner-1.jpg"
                   alt="Bolanius Media Studio"
@@ -110,12 +133,12 @@ export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
               </div>
               <div className="p-6 flex-1 flex flex-col justify-between space-y-6">
                 <div className="space-y-3">
-                  <div className="text-xs font-mono text-neutral-400">media.bolaniusprime.com</div>
-                  <h4 className="text-xl font-bold text-white">Bolanius Media Studio</h4>
-                  <p className="text-xs text-neutral-400 italic">
+                  <div className="text-xs font-mono text-neutral-500 dark:text-neutral-400">media.bolaniusprime.com</div>
+                  <h4 className="text-xl font-bold text-neutral-900 dark:text-white">Media Studio</h4>
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400 italic">
                     &ldquo;Capturing Moments. Creating Visual Impact.&rdquo;
                   </p>
-                  <p className="text-sm text-neutral-300 leading-relaxed">
+                  <p className="text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed">
                     Visual storytelling, photography, videography, media production, content creation, and professional image retouching.
                   </p>
                 </div>
@@ -123,7 +146,7 @@ export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
                 <button
                   type="button"
                   onClick={() => onNavigate('media')}
-                  className="w-full py-2.5 px-4 rounded-md bg-white hover:bg-neutral-200 text-neutral-950 text-xs font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                  className="w-full py-2.5 px-4 rounded-md bg-neutral-950 dark:bg-white hover:bg-neutral-800 dark:hover:bg-neutral-200 text-white dark:text-neutral-950 text-xs font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer"
                 >
                   <span>Open Media Studio</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -132,8 +155,8 @@ export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
             </div>
 
             {/* Card 2: Bolanius Brands */}
-            <div className="bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden flex flex-col justify-between hover:border-neutral-700 transition-all">
-              <div className="h-48 overflow-hidden bg-neutral-950">
+            <div className="bg-[#fcfbf7] dark:bg-neutral-900 border border-stone-200/90 dark:border-neutral-800 rounded-xl overflow-hidden flex flex-col justify-between hover:border-stone-300 dark:hover:border-neutral-700 transition-all shadow-[0_2px_10px_rgba(28,25,23,0.05),0_1px_2px_rgba(28,25,23,0.04)] dark:shadow-sm">
+              <div className="h-48 overflow-hidden bg-stone-200/60 dark:bg-neutral-950">
                 <img
                   src="https://images.squarespace-cdn.com/content/v1/629e3bad3644967181ca70d7/c6835389-ceb2-43e1-999e-a1f2d5743a85/branding-for-interior-designers-dan-rak-design-branding-studio-chicago6.jpg"
                   alt="Bolanius Brands"
@@ -143,12 +166,12 @@ export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
               </div>
               <div className="p-6 flex-1 flex flex-col justify-between space-y-6">
                 <div className="space-y-3">
-                  <div className="text-xs font-mono text-neutral-400">brands.bolaniusprime.com</div>
-                  <h4 className="text-xl font-bold text-white">Bolanius Brands</h4>
-                  <p className="text-xs text-neutral-400 italic">
+                  <div className="text-xs font-mono text-neutral-500 dark:text-neutral-400">brands.bolaniusprime.com</div>
+                  <h4 className="text-xl font-bold text-neutral-900 dark:text-white">Branding</h4>
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400 italic">
                     &ldquo;Building Identities. Expanding Global Opportunities.&rdquo;
                   </p>
-                  <p className="text-sm text-neutral-300 leading-relaxed">
+                  <p className="text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed">
                     Corporate branding, printing solutions, advertising campaigns, business consultancy, general contracts, and import/export trade.
                   </p>
                 </div>
@@ -156,7 +179,7 @@ export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
                 <button
                   type="button"
                   onClick={() => onNavigate('brands')}
-                  className="w-full py-2.5 px-4 rounded-md bg-white hover:bg-neutral-200 text-neutral-950 text-xs font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                  className="w-full py-2.5 px-4 rounded-md bg-neutral-950 dark:bg-white hover:bg-neutral-800 dark:hover:bg-neutral-200 text-white dark:text-neutral-950 text-xs font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer"
                 >
                   <span>Open Bolanius Brands</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -165,8 +188,8 @@ export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
             </div>
 
             {/* Card 3: Bolanius Real Estate */}
-            <div className="bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden flex flex-col justify-between hover:border-neutral-700 transition-all">
-              <div className="h-48 overflow-hidden bg-neutral-950">
+            <div className="bg-[#fcfbf7] dark:bg-neutral-900 border border-stone-200/90 dark:border-neutral-800 rounded-xl overflow-hidden flex flex-col justify-between hover:border-stone-300 dark:hover:border-neutral-700 transition-all shadow-[0_2px_10px_rgba(28,25,23,0.05),0_1px_2px_rgba(28,25,23,0.04)] dark:shadow-sm">
+              <div className="h-48 overflow-hidden bg-stone-200/60 dark:bg-neutral-950">
                 <img
                   src="https://framerusercontent.com/images/qAiNcohC0fIeyIc6Rd5eLX21B70.png?scale-down-to=1024&width=4032&height=2268"
                   alt="Bolanius Real Estate"
@@ -176,12 +199,12 @@ export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
               </div>
               <div className="p-6 flex-1 flex flex-col justify-between space-y-6">
                 <div className="space-y-3">
-                  <div className="text-xs font-mono text-neutral-400">realestate.bolaniusprime.com</div>
-                  <h4 className="text-xl font-bold text-white">Bolanius Real Estate</h4>
-                  <p className="text-xs text-neutral-400 italic">
+                  <div className="text-xs font-mono text-neutral-500 dark:text-neutral-400">realestate.bolaniusprime.com</div>
+                  <h4 className="text-xl font-bold text-neutral-900 dark:text-white">Real Estate</h4>
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400 italic">
                     &ldquo;Connecting People to Properties. Delivering Projects with Purpose.&rdquo;
                   </p>
-                  <p className="text-sm text-neutral-300 leading-relaxed">
+                  <p className="text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed">
                     Property sales, land acquisition, property management, real estate investment, and commercial project management.
                   </p>
                 </div>
@@ -189,7 +212,7 @@ export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
                 <button
                   type="button"
                   onClick={() => onNavigate('realestate')}
-                  className="w-full py-2.5 px-4 rounded-md bg-white hover:bg-neutral-200 text-neutral-950 text-xs font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                  className="w-full py-2.5 px-4 rounded-md bg-neutral-950 dark:bg-white hover:bg-neutral-800 dark:hover:bg-neutral-200 text-white dark:text-neutral-950 text-xs font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer"
                 >
                   <span>Open Real Estate Portal</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -201,40 +224,40 @@ export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
       </section>
 
       {/* Corporate Identity Section: Mission, Vision, Values */}
-      <section className="py-20 px-6 border-b border-neutral-800 bg-neutral-900/30">
+      <section className="py-20 px-6 border-b border-stone-200/90 dark:border-neutral-800 bg-[#efece4]/70 dark:bg-neutral-900/30 transition-colors">
         <div className="max-w-5xl mx-auto space-y-12">
           <div className="text-center space-y-2">
-            <h2 className="text-xs uppercase tracking-widest text-neutral-400 font-semibold">
+            <h2 className="text-xs uppercase tracking-widest text-neutral-500 dark:text-neutral-400 font-semibold">
               Corporate Identity
             </h2>
-            <h3 className="text-2xl sm:text-3xl font-bold text-white">
+            <h3 className="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white">
               Mission, Vision & Core Values
             </h3>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="p-8 rounded-xl bg-neutral-900 border border-neutral-800 space-y-3">
-              <h4 className="text-lg font-bold text-white">Our Mission</h4>
-              <p className="text-sm text-neutral-300 leading-relaxed">
+            <div className="p-8 rounded-xl bg-[#fcfbf7] dark:bg-neutral-900 border border-stone-200/90 dark:border-neutral-800 space-y-3 shadow-[0_2px_10px_rgba(28,25,23,0.05),0_1px_2px_rgba(28,25,23,0.04)] dark:shadow-sm">
+              <h4 className="text-lg font-bold text-neutral-900 dark:text-white">Our Mission</h4>
+              <p className="text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed">
                 To deliver innovative, dependable, and high-quality products and services that create value, solve problems across different industries.
               </p>
             </div>
 
-            <div className="p-8 rounded-xl bg-neutral-900 border border-neutral-800 space-y-3">
-              <h4 className="text-lg font-bold text-white">Our Vision</h4>
-              <p className="text-sm text-neutral-300 leading-relaxed">
+            <div className="p-8 rounded-xl bg-[#fcfbf7] dark:bg-neutral-900 border border-stone-200/90 dark:border-neutral-800 space-y-3 shadow-[0_2px_10px_rgba(28,25,23,0.05),0_1px_2px_rgba(28,25,23,0.04)] dark:shadow-sm">
+              <h4 className="text-lg font-bold text-neutral-900 dark:text-white">Our Vision</h4>
+              <p className="text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed">
                 To become a leading and internationally recognized multi-sector company known for excellence, innovation, integrity, and outstanding business solutions.
               </p>
             </div>
           </div>
 
           <div className="space-y-4">
-            <h4 className="text-base font-bold text-white text-center">Core Values</h4>
+            <h4 className="text-base font-bold text-neutral-900 dark:text-white text-center">Core Values</h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {coreValues.map((val) => (
-                <div key={val.title} className="p-4 rounded-lg bg-neutral-900 border border-neutral-800 space-y-1.5">
-                  <div className="text-sm font-semibold text-white">{val.title}</div>
-                  <div className="text-xs text-neutral-400 leading-relaxed">{val.desc}</div>
+                <div key={val.title} className="p-4 rounded-lg bg-[#fcfbf7] dark:bg-neutral-900 border border-stone-200/90 dark:border-neutral-800 space-y-1.5 shadow-[0_1px_4px_rgba(28,25,23,0.04)] dark:shadow-sm">
+                  <div className="text-sm font-semibold text-neutral-900 dark:text-white">{val.title}</div>
+                  <div className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">{val.desc}</div>
                 </div>
               ))}
             </div>
@@ -243,27 +266,27 @@ export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 px-6 border-b border-neutral-800">
+      <section id="contact" className="py-20 px-6 border-b border-stone-200/90 dark:border-neutral-800">
         <div className="max-w-4xl mx-auto space-y-10">
           <div className="text-center space-y-2">
-            <h2 className="text-xs uppercase tracking-widest text-neutral-400 font-semibold">
+            <h2 className="text-xs uppercase tracking-widest text-neutral-500 dark:text-neutral-400 font-semibold">
               Get in Touch
             </h2>
-            <h3 className="text-2xl sm:text-3xl font-bold text-white">
+            <h3 className="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white">
               Contact Bolanius
             </h3>
-            <p className="text-sm text-neutral-400">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400">
               Reach our Lagos office directly by phone, WhatsApp, email, or send an inquiry below.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-5 rounded-xl bg-neutral-900 border border-neutral-800 space-y-2">
-              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-neutral-400">
-                <Phone className="w-4 h-4 text-neutral-300" />
+            <div className="p-5 rounded-xl bg-[#fcfbf7] dark:bg-neutral-900 border border-stone-200/90 dark:border-neutral-800 shadow-[0_2px_8px_rgba(28,25,23,0.04)] dark:shadow-none space-y-2">
+              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                <Phone className="w-4 h-4 text-neutral-700 dark:text-neutral-300" />
                 <span>Call / WhatsApp</span>
               </div>
-              <div className="space-y-1.5 text-sm text-white font-medium">
+              <div className="space-y-1.5 text-sm text-neutral-900 dark:text-white font-medium">
                 {OFFICE_CONTACT.phones.map((phone) => (
                   <div key={phone.display} className="flex items-center justify-between gap-2">
                     <a href={`tel:${phone.tel}`} className="hover:underline">
@@ -273,7 +296,7 @@ export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
                       href={`https://wa.me/${phone.wa}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-xs text-emerald-400 hover:text-emerald-300"
+                      className="inline-flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300"
                     >
                       <MessageCircle className="w-3.5 h-3.5" />
                       <span>WhatsApp</span>
@@ -283,17 +306,17 @@ export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
               </div>
             </div>
 
-            <div className="p-5 rounded-xl bg-neutral-900 border border-neutral-800 space-y-2 flex flex-col justify-between">
+            <div className="p-5 rounded-xl bg-[#fcfbf7] dark:bg-neutral-900 border border-stone-200/90 dark:border-neutral-800 shadow-[0_2px_8px_rgba(28,25,23,0.04)] dark:shadow-none space-y-2 flex flex-col justify-between">
               <div className="space-y-2">
                 <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-neutral-400">
+                  <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
                     <a
                       href={OFFICE_CONTACT.mapsUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label="Open office location on your device"
                       title="Open location on your device"
-                      className="inline-flex items-center justify-center w-7 h-7 rounded-md bg-neutral-800 text-white hover:bg-white hover:text-neutral-950 transition-colors"
+                      className="inline-flex items-center justify-center w-7 h-7 rounded-md bg-[#efece4] dark:bg-neutral-800 text-neutral-900 dark:text-white hover:bg-neutral-950 dark:hover:bg-white hover:text-white dark:hover:text-neutral-950 transition-colors"
                     >
                       <MapPin className="w-4 h-4" />
                     </a>
@@ -303,40 +326,40 @@ export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
                     href={OFFICE_CONTACT.mapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-xs text-neutral-300 hover:text-white underline"
+                    className="inline-flex items-center gap-1 text-xs text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white underline"
                   >
                     <span>Maps</span>
                     <ExternalLink className="w-3 h-3" />
                   </a>
                 </div>
-                <p className="text-sm text-neutral-200 leading-relaxed">
+                <p className="text-sm text-neutral-700 dark:text-neutral-200 leading-relaxed">
                   {OFFICE_CONTACT.address}
                 </p>
               </div>
             </div>
 
-            <div className="p-5 rounded-xl bg-neutral-900 border border-neutral-800 space-y-2">
-              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-neutral-400">
-                <Mail className="w-4 h-4 text-neutral-300" />
+            <div className="p-5 rounded-xl bg-[#fcfbf7] dark:bg-neutral-900 border border-stone-200/90 dark:border-neutral-800 shadow-[0_2px_8px_rgba(28,25,23,0.04)] dark:shadow-none space-y-2">
+              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                <Mail className="w-4 h-4 text-neutral-700 dark:text-neutral-300" />
                 <span>Email Address</span>
               </div>
               <a
                 href={`mailto:${OFFICE_CONTACT.email}`}
-                className="text-sm text-white font-medium hover:underline break-all inline-block"
+                className="text-sm text-neutral-900 dark:text-white font-medium hover:underline break-all inline-block"
               >
                 {OFFICE_CONTACT.email}
               </a>
             </div>
           </div>
 
-          <OfficeLocationMap variant="dark" />
+          <OfficeLocationMap />
 
-          <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-6 sm:p-8 max-w-3xl mx-auto">
+          <div className="bg-[#fcfbf7] dark:bg-neutral-900 border border-stone-200/90 dark:border-neutral-800 shadow-[0_2px_12px_rgba(28,25,23,0.05)] dark:shadow-none rounded-xl p-6 sm:p-8 max-w-3xl mx-auto">
             {submitted ? (
               <div className="text-center py-8 space-y-3">
-                <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto" />
-                <h4 className="text-lg font-bold text-white">Message Sent</h4>
-                <p className="text-xs text-neutral-400 max-w-sm mx-auto">
+                <CheckCircle2 className="w-10 h-10 text-emerald-600 dark:text-emerald-400 mx-auto" />
+                <h4 className="text-lg font-bold text-neutral-900 dark:text-white">Message Sent</h4>
+                <p className="text-xs text-neutral-600 dark:text-neutral-400 max-w-sm mx-auto">
                   Thank you for contacting BOLANIUS PRIME LIMITED. Our team will review your message and reply promptly.
                 </p>
                 <button
@@ -345,7 +368,7 @@ export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
                     setSubmitted(false);
                     setFormData({ name: '', email: '', division: 'General Corporate', message: '' });
                   }}
-                  className="mt-4 px-4 py-2 rounded bg-neutral-800 text-xs text-white hover:bg-neutral-700 cursor-pointer"
+                  className="mt-4 px-4 py-2 rounded bg-neutral-950 dark:bg-neutral-800 text-xs text-white hover:bg-neutral-800 dark:hover:bg-neutral-700 cursor-pointer"
                 >
                   Send another message
                 </button>
@@ -354,35 +377,35 @@ export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-xs text-neutral-300">Your Name *</label>
+                    <label className="text-xs font-medium text-neutral-700 dark:text-neutral-300">Your Name *</label>
                     <input
                       type="text"
                       required
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       placeholder="Full Name"
-                      className="w-full px-3 py-2 rounded bg-neutral-950 border border-neutral-800 text-sm text-white focus:outline-none focus:border-neutral-500"
+                      className="w-full px-3 py-2 rounded bg-[#fffefb] dark:bg-neutral-950 border border-stone-300/90 dark:border-neutral-800 text-sm text-neutral-900 dark:text-white focus:outline-none focus:border-neutral-950 dark:focus:border-neutral-500"
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-xs text-neutral-300">Email Address *</label>
+                    <label className="text-xs font-medium text-neutral-700 dark:text-neutral-300">Email Address *</label>
                     <input
                       type="email"
                       required
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       placeholder="name@email.com"
-                      className="w-full px-3 py-2 rounded bg-neutral-950 border border-neutral-800 text-sm text-white focus:outline-none focus:border-neutral-500"
+                      className="w-full px-3 py-2 rounded bg-[#fffefb] dark:bg-neutral-950 border border-stone-300/90 dark:border-neutral-800 text-sm text-neutral-900 dark:text-white focus:outline-none focus:border-neutral-950 dark:focus:border-neutral-500"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-xs text-neutral-300">Division of Interest</label>
+                  <label className="text-xs font-medium text-neutral-700 dark:text-neutral-300">Division of Interest</label>
                   <select
                     value={formData.division}
                     onChange={(e) => setFormData({ ...formData, division: e.target.value })}
-                    className="w-full px-3 py-2 rounded bg-neutral-950 border border-neutral-800 text-sm text-white focus:outline-none focus:border-neutral-500"
+                    className="w-full px-3 py-2 rounded bg-[#fffefb] dark:bg-neutral-950 border border-stone-300/90 dark:border-neutral-800 text-sm text-neutral-900 dark:text-white focus:outline-none focus:border-neutral-950 dark:focus:border-neutral-500"
                   >
                     <option value="General Corporate">General Corporate Inquiry</option>
                     <option value="Bolanius Media Studio">Bolanius Media Studio</option>
@@ -392,22 +415,41 @@ export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-xs text-neutral-300">Message *</label>
+                  <label className="text-xs font-medium text-neutral-700 dark:text-neutral-300">Message *</label>
                   <textarea
                     rows={4}
                     required
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     placeholder="Describe your inquiry..."
-                    className="w-full px-3 py-2 rounded bg-neutral-950 border border-neutral-800 text-sm text-white focus:outline-none focus:border-neutral-500 resize-none"
+                    className="w-full px-3 py-2 rounded bg-[#fffefb] dark:bg-neutral-950 border border-stone-300/90 dark:border-neutral-800 text-sm text-neutral-900 dark:text-white focus:outline-none focus:border-neutral-950 dark:focus:border-neutral-500 resize-none"
                   />
                 </div>
 
+                {submitError && (
+                  <div className="p-3 rounded bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800 text-xs text-red-800 dark:text-red-200 space-y-2">
+                    <p>{submitError}</p>
+                    <a
+                      href={buildMailtoHref(enquirySubject, {
+                        Name: formData.name,
+                        Email: formData.email,
+                        Division: formData.division,
+                        Message: formData.message,
+                      })}
+                      className="inline-flex items-center gap-1.5 underline font-semibold text-red-950 dark:text-white dark:hover:text-neutral-200"
+                    >
+                      <Mail className="w-3.5 h-3.5" />
+                      <span>Send via your Email App instead</span>
+                    </a>
+                  </div>
+                )}
+
                 <button
                   type="submit"
-                  className="w-full py-2.5 rounded bg-white hover:bg-neutral-200 text-neutral-950 font-semibold text-xs transition-colors cursor-pointer"
+                  disabled={sending}
+                  className="w-full py-2.5 rounded bg-neutral-950 dark:bg-white hover:bg-neutral-800 dark:hover:bg-neutral-200 disabled:opacity-60 text-white dark:text-neutral-950 font-semibold text-xs transition-colors cursor-pointer"
                 >
-                  Send Inquiry to Bolanius
+                  {sending ? 'Sending...' : 'Send Inquiry to Bolanius'}
                 </button>
               </form>
             )}
@@ -416,12 +458,12 @@ export const ParentHub: React.FC<ParentHubProps> = ({ onNavigate }) => {
       </section>
 
       {/* Clean Footer */}
-      <footer className="py-8 px-6 text-center text-xs text-neutral-500 space-y-1.5">
+      <footer className="py-8 px-6 text-center text-xs text-neutral-500 bg-[#ece8df]/85 dark:bg-transparent space-y-1.5">
         <p>&copy; {new Date().getFullYear()} BOLANIUS PRIME LIMITED. All rights reserved.</p>
         <p>{OFFICE_CONTACT.address}</p>
         <p>
           Call / WhatsApp: {OFFICE_CONTACT.phones.map((p) => p.display).join(', ')} ·{' '}
-          <a href={`mailto:${OFFICE_CONTACT.email}`} className="hover:text-neutral-300 underline">
+          <a href={`mailto:${OFFICE_CONTACT.email}`} className="hover:text-neutral-900 dark:hover:text-neutral-300 underline">
             {OFFICE_CONTACT.email}
           </a>
         </p>
